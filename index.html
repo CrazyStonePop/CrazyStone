@@ -1,512 +1,697 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小石头S — 以身为笔</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --abyss:#08080a;--charcoal:#121214;--surface:#1a1a1e;--cream:#f5f3ef;--paper:#faf8f5;
-  --gold:#c4a870;--gold-dim:rgba(196,168,112,0.25);--gold-bright:rgba(220,188,120,0.7);
-  --gray:#8a8478;--gray-light:#b8b4ac;--gray-dim:rgba(255,255,255,0.08);
-  --red:#8b3a3a;--red-dim:rgba(139,58,58,0.06);
-  --f-d:'Playfair Display',Georgia,'Times New Roman',serif;
-  --f-b:'Outfit','PingFang SC','Microsoft YaHei',sans-serif;
-  --sp:cubic-bezier(0.16,1,0.3,1);--sp2:cubic-bezier(0.34,1.56,0.64,1)
-}
-html{scroll-behavior:smooth}
-body{font-family:var(--f-b);color:#fff;background:var(--abyss);-webkit-font-smoothing:antialiased;overflow-x:hidden;font-weight:300}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>小石头S — 以身为笔</title>
+  <meta name="description" content="小石头S · 国家一级演员 · 从铜陵到巴黎，从孤儿到法兰西共和国总统奖。空中每一秒，都是十年功。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    /* ================================================================
+       SHI TOU S — Light Through Water variant
+       Design System: 小龙虾 100% alignment
+       ================================================================ */
 
-/* ─── REVEAL ─── */
-.rv{opacity:0;transform:translateY(24px);transition:all 0.8s var(--sp);will-change:transform,opacity}
-.rv.vi{opacity:1;transform:translateY(0)}
-.d01{transition-delay:0.1s}.d02{transition-delay:0.2s}.d03{transition-delay:0.3s}.d04{transition-delay:0.4s}.d05{transition-delay:0.5s}
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ─── NAV ─── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;
-  transition:all 0.5s ease;mix-blend-mode:difference
-}
-nav.solid{
-  background:rgba(8,8,10,0.92);backdrop-filter:blur(24px);mix-blend-mode:normal;padding:1rem 3rem
-}
-.nb{
-  font-size:0.45rem;font-weight:400;letter-spacing:0.3em;
-  color:rgba(255,255,255,0.5);text-transform:uppercase
-}
-.nl{display:flex;gap:2.5rem}
-.nl a{
-  font-size:0.4rem;font-weight:400;letter-spacing:0.2em;
-  color:rgba(255,255,255,0.25);text-decoration:none;text-transform:uppercase;
-  transition:color 0.3s;position:relative
-}
-.nl a::after{
-  content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;
-  background:var(--gold);transition:width 0.4s var(--sp)
-}
-.nl a:hover{color:rgba(255,255,255,0.8)}
-.nl a:hover::after{width:100%}
+    :root {
+      --cream: #faf6f0;
+      --cream-deep: #f0ece6;
+      --charcoal: #1a1a1a;
+      --charcoal-soft: #2a2a2a;
+      --teal: #0d9488;
+      --teal-light: #5eead4;
+      --gold: #c4a870;
+      --warm-gray: #78716c;
+      --light-gray: #d6d3d1;
+      --paper: #ffffff;
 
-.container{max-width:1000px;margin:0 auto;padding:0 2rem}
-@media(max-width:768px){nav{padding:1.2rem 1.5rem}.nl{display:none}.container{padding:0 1.5rem}}
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Outfit', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --spring: cubic-bezier(0.16, 1, 0.3, 1);
+      --spring-out: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-/* ════════════════════════════════════════
-   HERO — Full photo, parallax feel, bold
-   ════════════════════════════════════════ */
-.hero{
-  min-height:100vh;display:flex;align-items:flex-end;justify-content:center;
-  position:relative;overflow:hidden
-}
-.hero-img{
-  position:absolute;inset:-20px;width:calc(100% + 40px);height:calc(100% + 40px);
-  object-fit:cover;object-position:50% 25%;z-index:0;transition:transform 0.1s linear
-}
-.hero-overlay{
-  position:absolute;inset:0;z-index:1;
-  background:linear-gradient(180deg,rgba(8,8,10,0.15) 0%,rgba(8,8,10,0.3) 40%,rgba(8,8,10,0.7) 70%,var(--abyss) 100%)
-}
-.hero-content{
-  position:relative;z-index:2;text-align:center;padding:0 2rem 4rem;width:100%
-}
-.hero-label{
-  font-size:0.4rem;letter-spacing:0.45em;color:rgba(196,168,112,0.25);margin-bottom:1.5rem;
-  text-transform:uppercase
-}
-.hero-content h1{
-  font-family:var(--f-d);font-size:clamp(4rem,14vw,9rem);font-weight:400;
-  line-height:0.82;letter-spacing:-0.05em
-}
-.hero-content h1 .g{color:var(--gold)}
-.hero-sub{
-  font-size:clamp(0.65rem,1.1vw,0.85rem);font-weight:200;
-  letter-spacing:0.35em;color:rgba(255,255,255,0.15);margin-top:1.8rem;text-transform:uppercase
-}
-.hero-line{
-  width:2rem;height:1px;background:var(--gold);margin:2rem auto 0;opacity:0.3
-}
-.scroll-hint{
-  position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:3;
-  display:flex;flex-direction:column;align-items:center;gap:0.4rem;opacity:0.3
-}
-.scroll-hint span{font-size:0.3rem;letter-spacing:0.2em;text-transform:uppercase}
-.scroll-dot{
-  width:2px;height:24px;background:linear-gradient(to bottom,var(--gold),transparent);
-  animation:scrollPulse 2s ease-in-out infinite
-}
-@keyframes scrollPulse{0%,100%{opacity:0.2;height:24px}50%{opacity:0.8;height:40px}}
+      --section-py: clamp(6rem, 10vw, 10rem);
+    }
 
-/* ════════════════════════════════════════
-   QUOTE — The signature line
-   ════════════════════════════════════════ */
-.quote-band{
-  padding:5rem 0;text-align:center;
-  background:linear-gradient(180deg,var(--abyss),rgba(196,168,112,0.015),var(--abyss))
-}
-.quote-band blockquote{
-  font-family:var(--f-d);font-style:italic;
-  font-size:clamp(1.3rem,2.8vw,2.2rem);color:var(--gold);
-  max-width:500px;margin:0 auto;line-height:1.25;letter-spacing:-0.01em
-}
-.quote-band cite{
-  display:block;margin-top:1.2rem;
-  font-size:0.4rem;font-style:normal;letter-spacing:0.25em;color:rgba(255,255,255,0.08)
-}
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-weight: 300;
+      color: var(--charcoal);
+      background: var(--cream);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
 
-/* ════════════════════════════════════════
-   STATS — Clean number strip
-   ════════════════════════════════════════ */
-.stats{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  border-top:1px solid rgba(196,168,112,0.04);
-  border-bottom:1px solid rgba(196,168,112,0.04)
-}
-.stat{padding:3rem 1.5rem;text-align:center;cursor:default;position:relative}
-.stat+.stat{border-left:1px solid rgba(196,168,112,0.04)}
-.stat .num{font-family:var(--f-d);font-size:clamp(2.2rem,4vw,3.6rem);font-weight:400;color:var(--gold);line-height:1;margin-bottom:0.6rem}
-.stat .lb{font-size:0.4rem;letter-spacing:0.2em;color:rgba(255,255,255,0.12);text-transform:uppercase;font-weight:300}
+    /* ================================================================
+       NAV
+       ================================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.5s var(--spring);
+    }
+    nav.scrolled {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(24px) saturate(1.5);
+      border-bottom: 1px solid rgba(26, 26, 26, 0.04);
+      padding: 1rem 2rem;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    .nav-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: inline-block;
+    }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--warm-gray);
+      position: relative;
+      transition: color 0.3s var(--spring);
+    }
+    .nav-links a:hover { color: var(--charcoal); }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.4s var(--spring);
+    }
+    .nav-links a:hover::after { width: 100%; }
 
-@media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}}
+    /* ================================================================
+       HERO
+       ================================================================ */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100dvh;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 6rem;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 30% 20%, rgba(196, 168, 112, 0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 70% 80%, rgba(13, 148, 136, 0.06) 0%, transparent 50%);
+      animation: hero-shift 12s ease-in-out infinite alternate;
+    }
+    @keyframes hero-shift {
+      0%   { transform: scale(1) translate(0, 0); }
+      50%  { transform: scale(1.04) translate(1%, -1%); }
+      100% { transform: scale(1) translate(-1%, 1%); }
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+    .hero-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fade-up 1s var(--spring) 0.6s forwards;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(3.5rem, 12vw, 7.5rem);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      opacity: 0;
+      animation: fade-up 1s var(--spring) 0.8s forwards;
+    }
+    .hero-title .accent {
+      color: var(--gold);
+      font-style: italic;
+      display: block;
+    }
+    .hero-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2rem;
+      align-items: end;
+    }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--warm-gray);
+      line-height: 1.7;
+      max-width: 40ch;
+      opacity: 0;
+      animation: fade-up 1s var(--spring) 1s forwards;
+    }
+    .hero-sub strong { color: var(--charcoal); font-weight: 400; }
+    .hero-meta {
+      text-align: right;
+      opacity: 0;
+      animation: fade-up 1s var(--spring) 1.2s forwards;
+    }
+    .hero-meta p {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--warm-gray);
+      line-height: 2;
+    }
+    .hero-meta span { color: var(--gold); }
 
-/* ════════════════════════════════════════
-   JOURNEY — The full story, photo-backed
-   ════════════════════════════════════════ */
-.journey{padding:6rem 0;position:relative}
-.journey-label{
-  font-size:0.35rem;letter-spacing:0.35em;color:rgba(196,168,112,0.15);
-  text-align:center;margin-bottom:4rem;text-transform:uppercase
-}
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-.j-step{display:grid;grid-template-columns:3fr 5fr;gap:3rem;margin-bottom:4rem;align-items:start}
-.j-step:last-child{margin-bottom:0}
-.j-left{text-align:right;position:relative;padding-right:2rem}
-.j-left .j-year{
-  font-family:var(--f-d);font-size:clamp(1.8rem,3vw,2.8rem);
-  font-weight:400;color:rgba(196,168,112,0.08);line-height:1;margin-bottom:0.3rem
-}
-.j-left .j-tag{
-  font-size:0.35rem;letter-spacing:0.2em;color:rgba(196,168,112,0.2);text-transform:uppercase
-}
-.j-right .j-title{font-size:0.85rem;font-weight:400;margin-bottom:0.3rem;color:rgba(255,255,255,0.7)}
-.j-right .j-desc{font-size:0.55rem;color:rgba(255,255,255,0.2);line-height:2;max-width:45ch}
-.j-right .j-desc span.g{color:var(--gold)}
-.j-line{
-  position:absolute;right:0;top:0.3rem;bottom:-2rem;width:1px;
-  background:linear-gradient(to bottom,var(--gold-dim),transparent)
-}
-.j-dot{
-  position:absolute;right:-3px;top:0.3rem;width:6px;height:6px;
-  border-radius:50%;background:var(--abyss);border:2px solid var(--gold);transition:all 0.4s var(--sp)
-}
-.j-step.vi .j-dot{background:var(--gold);box-shadow:0 0 12px rgba(196,168,112,0.3)}
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fade-up 1s var(--spring) 1.6s forwards;
+    }
+    .scroll-hint span {
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--light-gray);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 30px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scroll-breathe 2s ease-in-out infinite;
+    }
+    @keyframes scroll-breathe {
+      0%, 100% { opacity: 0.2; height: 30px; }
+      50% { opacity: 0.6; height: 45px; }
+    }
 
-/* photo break */
-.photo-break{
-  width:100%;height:50vh;position:relative;overflow:hidden;margin:4rem 0
-}
-.photo-break img{width:100%;height:100%;object-fit:cover;object-position:center 50%}
-.photo-break .pb-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(180deg,var(--abyss),transparent 20%,transparent 80%,var(--abyss))
-}
-.photo-break .pb-quote{
-  position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);
-  font-family:var(--f-d);font-style:italic;font-size:clamp(0.8rem,1.5vw,1.1rem);
-  color:rgba(255,255,255,0.3);letter-spacing:0.05em;text-align:center
-}
+    /* ================================================================
+       SECTION
+       ================================================================ */
+    section { position: relative; z-index: 1; }
+    .section-white { background: var(--paper); padding: var(--section-py) 0; }
+    .section-cream { background: var(--cream); padding: var(--section-py) 0; }
+    .section-dark {
+      background: var(--charcoal);
+      color: var(--cream);
+      padding: var(--section-py) 0;
+    }
+    .section-dark .section-label { color: var(--gold); }
+    .section-dark .text-muted { color: rgba(255, 255, 255, 0.5); }
+    .section-label {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      font-weight: 400;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 3rem;
+    }
+    .section-title.small { font-size: clamp(1.5rem, 3vw, 2.2rem); }
 
-@media(max-width:768px){.j-step{grid-template-columns:1fr;gap:1rem}.j-left{text-align:left;padding-right:0}.j-dot{right:auto;left:0}.j-line{right:auto;left:0}}
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s var(--spring), transform 0.8s var(--spring);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+    .reveal-d5 { transition-delay: 0.5s; }
 
-/* ════════════════════════════════════════
-   LIGHT & SHADOW — Two sides of one life
-   ════════════════════════════════════════ */
-.ls-section{padding:5rem 0}
-.ls-label{
-  font-size:0.35rem;letter-spacing:0.35em;color:rgba(196,168,112,0.15);
-  text-align:center;margin-bottom:0.5rem;text-transform:uppercase
-}
-.ls-title{
-  font-family:var(--f-d);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:400;
-  text-align:center;color:rgba(255,255,255,0.6);margin-bottom:3rem;line-height:1.1
-}
-.ls-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;background:rgba(196,168,112,0.03)}
-.ls-card{position:relative;overflow:hidden}
-.ls-card .ls-img{width:100%;height:280px;object-fit:cover;display:block}
-.ls-card .ls-img-overlay{
-  position:absolute;top:0;left:0;right:0;height:280px
-}
-.ls-card.light .ls-img-overlay{
-  background:linear-gradient(180deg,rgba(196,168,112,0.08),rgba(8,8,10,0.4))
-}
-.ls-card.dark .ls-img-overlay{
-  background:linear-gradient(180deg,rgba(139,58,58,0.08),rgba(8,8,10,0.4))
-}
-.ls-card .ls-body{padding:2rem}
-.ls-card .ls-badge{
-  display:inline-block;font-size:0.35rem;letter-spacing:0.2em;
-  padding:0.25rem 0.8rem;margin-bottom:0.75rem;text-transform:uppercase
-}
-.ls-card.light .ls-badge{
-  color:var(--gold);border:1px solid rgba(196,168,112,0.15)
-}
-.ls-card.dark .ls-badge{
-  color:var(--red);border:1px solid rgba(139,58,58,0.2)
-}
-.ls-card h3{font-size:0.7rem;font-weight:400;margin-bottom:0.5rem}
-.ls-card.light h3{color:rgba(255,255,255,0.7)}
-.ls-card.dark h3{color:rgba(139,58,58,0.6)}
-.ls-card .ls-text{
-  font-size:0.5rem;line-height:1.9;max-width:38ch
-}
-.ls-card.light .ls-text{color:rgba(255,255,255,0.25)}
-.ls-card.dark .ls-text{color:rgba(255,255,255,0.15)}
+    /* ================================================================
+       QUOTE BANNER
+       ================================================================ */
+    .quote-section {
+      padding: 5rem 0;
+      text-align: center;
+    }
+    .quote-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.3;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .quote-text .accent {
+      color: var(--teal);
+    }
+    .quote-attrib {
+      font-size: 0.8rem;
+      color: var(--warm-gray);
+      margin-top: 1.5rem;
+      font-family: var(--font-mono);
+    }
 
-@media(max-width:768px){.ls-grid{grid-template-columns:1fr}}
+    /* ================================================================
+       TIMELINE
+       ================================================================ */
+    .timeline {
+      display: grid;
+      gap: 2px;
+      background: var(--light-gray);
+    }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 2rem;
+      padding: 2.5rem;
+      background: var(--paper);
+      transition: background 0.4s var(--spring);
+    }
+    .timeline-item:hover {
+      background: rgba(13, 148, 136, 0.02);
+    }
+    .timeline-item .year {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      color: var(--gold);
+      font-weight: 400;
+      line-height: 1.3;
+    }
+    .timeline-item .tl-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .timeline-item .tl-content p {
+      font-size: 0.85rem;
+      color: var(--warm-gray);
+      line-height: 1.7;
+      max-width: 60ch;
+    }
 
-/* ════════════════════════════════════════
-   WORKS — Three card grid
-   ════════════════════════════════════════ */
-.works{padding:5rem 0}
-.works .s-label{
-  font-size:0.35rem;letter-spacing:0.35em;color:rgba(196,168,112,0.15);
-  text-align:center;margin-bottom:3rem;text-transform:uppercase
-}
-.w-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(196,168,112,0.05)}
-.w-card{padding:2.5rem 2rem;background:var(--surface);text-align:center;cursor:default;transition:all 0.5s var(--sp);position:relative;overflow:hidden}
-.w-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:var(--gold-dim);transform:scaleX(0);transform-origin:left;
-  transition:transform 0.5s var(--sp)
-}
-.w-card:hover::before{transform:scaleX(1)}
-.w-card:hover{background:rgba(196,168,112,0.02)}
-.w-card .wn{font-size:0.35rem;letter-spacing:0.25em;color:rgba(196,168,112,0.2);margin-bottom:0.6rem;text-transform:uppercase}
-.w-card h3{font-size:0.8rem;font-weight:400;margin-bottom:0.4rem}
-.w-card p{font-size:0.45rem;color:rgba(255,255,255,0.15);line-height:1.8;max-width:26ch;margin:0 auto}
+    /* ================================================================
+       WORKS
+       ================================================================ */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .work-card {
+      padding: 2.5rem;
+      background: var(--cream);
+      border: 1px solid var(--light-gray);
+      transition: all 0.5s var(--spring);
+      cursor: default;
+    }
+    .work-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 12px 40px -12px rgba(196, 168, 112, 0.15);
+    }
+    .work-card .w-num {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+    .work-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 0.6rem;
+    }
+    .work-card p {
+      font-size: 0.85rem;
+      color: var(--warm-gray);
+      line-height: 1.6;
+    }
 
-@media(max-width:768px){.w-grid{grid-template-columns:1fr}}
+    /* ================================================================
+       HONORS
+       ================================================================ */
+    .honors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--light-gray);
+    }
+    .honor-card {
+      padding: 2rem;
+      background: var(--paper);
+      transition: background 0.4s var(--spring);
+    }
+    .honor-card:hover {
+      background: rgba(196, 168, 112, 0.03);
+    }
+    .honor-card .h-year {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .honor-card h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 0.3rem;
+    }
+    .honor-card p {
+      font-size: 0.75rem;
+      color: var(--warm-gray);
+      line-height: 1.5;
+    }
+    .honor-card .h-tag {
+      display: inline-block;
+      margin-top: 0.6rem;
+      font-size: 0.55rem;
+      padding: 0.2rem 0.5rem;
+      background: rgba(196, 168, 112, 0.08);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-/* ════════════════════════════════════════
-   HONORS — Catalog style (Arch10 inspired)
-   ════════════════════════════════════════ */
-.honors{background:var(--charcoal);padding:4rem 0}
-.honors .s-label{
-  font-size:0.35rem;letter-spacing:0.35em;color:rgba(196,168,112,0.15);
-  text-align:center;margin-bottom:2.5rem;text-transform:uppercase
-}
-.h-table{display:grid;grid-template-columns:1fr;gap:0}
-.h-row{
-  display:grid;grid-template-columns:1fr 2fr 1fr 1fr;
-  border-bottom:1px solid rgba(255,255,255,0.02);transition:all 0.3s var(--sp)
-}
-.h-row:first-child{border-top:1px solid rgba(255,255,255,0.02)}
-.h-row:hover{background:rgba(196,168,112,0.02)}
-.h-row .h-cell{padding:1rem 1.2rem;font-size:0.5rem;display:flex;align-items:center;color:rgba(255,255,255,0.2)}
-.h-row .h-cell:first-child{color:var(--gold);font-size:0.4rem;letter-spacing:0.1em;font-weight:400}
-.h-row .h-cell:nth-child(2){color:rgba(255,255,255,0.5)}
-.h-row .h-cell:last-child{justify-content:flex-end;font-size:0.35rem;letter-spacing:0.1em;text-transform:uppercase}
-.h-row .h-cell .tag{
-  font-size:0.35rem;padding:0.2rem 0.6rem;border:1px solid rgba(196,168,112,0.08);
-  color:rgba(196,168,112,0.3);border-radius:0
-}
+    /* ================================================================
+       FOOTER
+       ================================================================ */
+    footer {
+      padding: 4rem 0;
+      text-align: center;
+      border-top: 1px solid var(--light-gray);
+    }
+    footer p {
+      font-size: 0.65rem;
+      color: var(--light-gray);
+    }
 
-@media(max-width:768px){.h-row{grid-template-columns:1fr 1fr}.h-row .h-cell:nth-child(3),.h-row .h-cell:nth-child(4){display:none}}
-
-/* ════════════════════════════════════════
-   PRESENT — Where he is now
-   ════════════════════════════════════════ */
-.present{padding:5rem 0;text-align:center}
-.present .p-label{
-  font-size:0.35rem;letter-spacing:0.35em;color:rgba(196,168,112,0.15);
-  margin-bottom:1.5rem;text-transform:uppercase
-}
-.present h2{
-  font-family:var(--f-d);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:400;
-  color:rgba(255,255,255,0.5);margin-bottom:1rem;line-height:1.1
-}
-.present h2 em{color:var(--gold);font-style:italic}
-.present p{font-size:0.55rem;color:rgba(255,255,255,0.15);max-width:450px;margin:0 auto;line-height:2}
-.present .p-links{display:flex;justify-content:center;gap:1rem;margin-top:2rem;flex-wrap:wrap}
-.present .p-links a{
-  font-size:0.4rem;letter-spacing:0.15em;color:rgba(196,168,112,0.2);
-  text-decoration:none;border:1px solid rgba(196,168,112,0.06);
-  padding:0.6rem 1.5rem;transition:all 0.3s var(--sp)
-}
-.present .p-links a:hover{color:var(--gold);border-color:rgba(196,168,112,0.2);background:rgba(196,168,112,0.03)}
-
-/* ════════════════════════════════════════
-   FOOTER
-   ════════════════════════════════════════ */
-footer{padding:3rem 0;text-align:center;border-top:1px solid rgba(255,255,255,0.02)}
-footer .f-name{
-  font-family:var(--f-d);font-size:1rem;font-weight:400;color:rgba(196,168,112,0.2);margin-bottom:0.3rem
-}
-footer p{font-size:0.3rem;color:rgba(255,255,255,0.04);letter-spacing:0.15em;text-transform:uppercase}
-</style>
+    /* ================================================================
+       RESPONSIVE
+       ================================================================ */
+    @media (max-width: 768px) {
+      .container { padding: 0 1.25rem; }
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+      .hero-row { grid-template-columns: 1fr; gap: 1rem; }
+      .hero-meta { text-align: left; }
+      .timeline-item { grid-template-columns: 1fr; gap: 0.5rem; padding: 1.5rem; }
+      .works-grid { grid-template-columns: 1fr; }
+      .honors-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 2.8rem; }
+    }
+  </style>
 </head>
 <body>
 
-<nav id="nav">
-  <div class="nb">Zhang Gongli</div>
-  <div class="nl">
-    <a href="#journey">Journey</a>
-    <a href="#truth">Truth</a>
-    <a href="#works">Works</a>
-    <a href="#honors">Honors</a>
-  </div>
-</nav>
-
-<!-- ═══ HERO ═══ -->
-<section class="hero" id="hero">
-  <img class="hero-img" src="https://images.unsplash.com/photo-1504609813442-a8924e83f76e?w=1600&q=85" alt="小石头S" style="object-position:50% 30%">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <p class="hero-label">国家一级演员</p>
-    <h1>章功<span class="g">力</span></h1>
-    <p class="hero-sub">Zhang Gongli · National Class-A Artist</p>
-    <div class="hero-line"></div>
-  </div>
-  <div class="scroll-hint"><span>Scroll</span><div class="scroll-dot"></div></div>
-</section>
-
-<!-- ═══ QUOTE ═══ -->
-<section class="quote-band">
-  <blockquote class="rv">"空中每一秒，都是十年功"</blockquote>
-  <cite class="rv d01">— 小石头S</cite>
-</section>
-
-<!-- ═══ STATS ═══ -->
-<section class="stats">
-  <div class="stat rv"><div class="num">30+</div><div class="lb">Years of Mastery</div></div>
-  <div class="stat rv d01"><div class="num">12</div><div class="lb">Countries</div></div>
-  <div class="stat rv d02"><div class="num">15+</div><div class="lb">Major Awards</div></div>
-  <div class="stat rv d03"><div class="num">1</div><div class="lb">Presidential Award</div></div>
-</section>
-
-<!-- ═══ JOURNEY ═══ -->
-<section class="journey" id="journey">
-  <div class="container">
-    <p class="journey-label rv">The Journey</p>
-
-    <div class="j-step rv">
-      <div class="j-left"><div class="j-year">1982</div><div class="j-tag">Birth</div><div class="j-line"></div><div class="j-dot"></div></div>
-      <div class="j-right"><div class="j-title">安徽铜陵 · 逆风开局</div><div class="j-desc">母亲在他出生时离世，父亲早年也走了。爷爷把他拉扯大。4岁送去练体操——不是因为他有天赋，是因为没有退路。</div></div>
+  <!-- ================================================================
+       NAV
+       ================================================================ -->
+  <nav id="navbar">
+    <div class="nav-brand">
+      <span class="nav-dot"></span>
+      <span>小石头S</span>
     </div>
-
-    <div class="j-step rv d01">
-      <div class="j-left"><div class="j-year">1989</div><div class="j-tag">Training</div><div class="j-line"></div><div class="j-dot"></div></div>
-      <div class="j-right"><div class="j-title">安徽黄梅戏艺术职业学院</div><div class="j-desc">7岁考入，8年专业杂技训练。爷爷每月20元伙食费送他入行。这8年把他从一个普通孩子锻造成了一个杂技人。</div></div>
+    <div class="nav-links">
+      <a href="#journey">历程</a>
+      <a href="#works">代表作</a>
+      <a href="#honors">荣誉</a>
+      <a href="#about">关于</a>
     </div>
-
-    <div class="j-step rv d02">
-      <div class="j-left"><div class="j-year">1997</div><div class="j-tag">Start</div><div class="j-line"></div><div class="j-dot"></div></div>
-      <div class="j-right"><div class="j-title">沈阳杂技团</div><div class="j-desc">毕业后与同学姚登波一同加入。老师周其品收他为义子，亲手打磨《高椅》。没有周老师，就没有后来的小石头S。</div></div>
-    </div>
-
-    <div class="j-step rv d03">
-      <div class="j-left"><div class="j-year">2001</div><div class="j-tag">Breakthrough</div><div class="j-line"></div><div class="j-dot"></div></div>
-      <div class="j-right"><div class="j-title">法兰西共和国总统奖</div><div class="j-desc">法国第二十二届"明日"世界马戏节。《高椅》震惊全场——唯一金奖 + 法兰西共和国总统奖。同年金菊奖、最佳节目奖、最佳演员奖全部收入。<br>10月雅典卫城演出，9米无保险，一位外国老太太当场吓晕。<span class="g">那时他一场演出挣37美元。</span></div></div>
-    </div>
-
-    <div class="j-step rv d04">
-      <div class="j-left"><div class="j-year">2002</div><div class="j-tag">Peak</div><div class="j-line"></div><div class="j-dot"></div></div>
-      <div class="j-right"><div class="j-title">央视春晚 · 一等奖</div><div class="j-desc">与姚登波的《力量》在央视春节联欢晚会演出，获观众最喜爱节目一等奖。全国瞩目的几分钟，浓缩了十几年的汗水。</div></div>
-    </div>
-
-    <div class="j-step rv d01">
-      <div class="j-left"><div class="j-year">2006</div><div class="j-tag">World</div><div class="j-line"></div><div class="j-dot"></div></div>
-      <div class="j-right"><div class="j-title">太阳马戏团 · 蒙特利尔</div><div class="j-desc">加入世界顶级马戏团，主演剧目《盒子》。从沈阳到蒙特利尔，从中国杂技台到全球巡演——这是他走了近20年的路。</div></div>
-    </div>
-
-    <div class="j-step rv d02">
-      <div class="j-left"><div class="j-year">2019</div><div class="j-tag">Return</div><div class="j-dot"></div></div>
-      <div class="j-right"><div class="j-title">审判员 · 明日马戏节</div><div class="j-desc">受法国邀请，回到18年前夺冠的舞台——这一次，坐在了裁判席。同年返校任教，把路传给来者。</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ PHOTO BREAK ═══ -->
-<section class="photo-break">
-  <img src="https://images.unsplash.com/photo-1504711434969-e33886168d38?w=1600&q=85" alt="光与影">
-  <div class="pb-overlay"></div>
-  <div class="pb-quote">"他不只是拿了奖杯的人。他是从没有退路的地方，硬生生走出一条路的人。"</div>
-</section>
-
-<!-- ═══ LIGHT & SHADOW ═══ -->
-<section class="ls-section" id="truth">
-  <div class="container">
-    <p class="ls-label rv">The Full Picture</p>
-    <div class="ls-title rv d01">Every life has two sides.<br>This one is no different.</div>
-    <div class="ls-grid">
-      <div class="ls-card light rv">
-        <img class="ls-img" src="https://images.unsplash.com/photo-1514315384763-ba401779410f?w=800&q=80" alt="">
-        <div class="ls-img-overlay"></div>
-        <div class="ls-body">
-          <div class="ls-badge">● Light</div>
-          <h3>What he earned</h3>
-          <div class="ls-text">13岁全国第二 · 18岁全国第一 · 法兰西共和国总统奖 · 雅典卫城 · 央视春晚一等奖 · 太阳马戏团 · 国家一级演员 · 全国五一劳动奖章 · 法国明日节审判员</div>
-        </div>
-      </div>
-      <div class="ls-card dark rv d02">
-        <img class="ls-img" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80" alt="">
-        <div class="ls-img-overlay"></div>
-        <div class="ls-body">
-          <div class="ls-badge">● Shadow</div>
-          <h3>What he endured</h3>
-          <div class="ls-text">母亲出生即离世 · 父亲早年去世 · 训练伤痛贯穿职业生涯 · 2010年被原单位起诉败诉 · 海外演出一场37美元 · 每一步都是身体和意志的代价</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ WORKS ═══ -->
-<section class="works" id="works">
-  <div class="container">
-    <p class="s-label rv">Signature Works</p>
-    <div class="w-grid">
-      <div class="w-card rv"><div class="wn">01</div><h3>单人高椅</h3><p>层层叠椅，9米无保险。<br>雅典卫城惊晕老太太的传奇。</p></div>
-      <div class="w-card rv d01"><div class="wn">02</div><h3>力量</h3><p>与姚登波合作。人体极限雕塑。<br>2002年春晚一等奖作品。</p></div>
-      <div class="w-card rv d02"><div class="wn">03</div><h3>盒子 · 太阳马戏团</h3><p>蒙特利尔驻场。世界巡演。<br>从中国少年到国际大将。</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ HONORS CATALOG ═══ -->
-<section class="honors" id="honors">
-  <div class="container">
-    <p class="s-label rv">Honors Catalog</p>
-    <div class="h-table">
-      <div class="h-row rv"><div class="h-cell">—</div><div class="h-cell">国家一级演员</div><div class="h-cell">中国杂技界最高职称</div><div class="h-cell"><span class="tag">National</span></div></div>
-      <div class="h-row rv d01"><div class="h-cell">2001</div><div class="h-cell">法兰西共和国总统奖</div><div class="h-cell">明日世界马戏节 · 唯一金奖</div><div class="h-cell"><span class="tag">International</span></div></div>
-      <div class="h-row rv d02"><div class="h-cell">2001</div><div class="h-cell">金菊奖 · 最佳演员奖</div><div class="h-cell">第一届中国杂技比赛</div><div class="h-cell"><span class="tag">National</span></div></div>
-      <div class="h-row rv d03"><div class="h-cell">2002</div><div class="h-cell">央视春晚 · 一等奖</div><div class="h-cell">《力量》观众最喜爱作品</div><div class="h-cell"><span class="tag">National</span></div></div>
-      <div class="h-row rv"><div class="h-cell">—</div><div class="h-cell">全国五一劳动奖章</div><div class="h-cell">国家劳动荣誉</div><div class="h-cell"><span class="tag">National</span></div></div>
-      <div class="h-row rv d01"><div class="h-cell">2019</div><div class="h-cell">明日马戏节 · 审判员</div><div class="h-cell">从选手到评审的身份蜕变</div><div class="h-cell"><span class="tag">International</span></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ PRESENT ═══ -->
-<section class="present">
-  <div class="container">
-    <p class="p-label rv">Now</p>
-    <h2 class="rv d01">The story is <em>not over</em>.</h2>
-    <p class="rv d02">2012年成立演艺公司。2015年俄罗斯世锦赛优秀奖。2019年返校任教，把路传给下一代。<br>他从铜陵走到巴黎，从孤儿走到国家一级演员——这条路，还在继续。</p>
-    <div class="p-links rv d03">
-      <a href="#">Baidu Baike</a>
-      <a href="#">CNKI Archive</a>
-      <a href="#">Performance Reel</a>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ FOOTER ═══ -->
-<footer>
-  <div class="f-name">Zhang Gongli</div>
-  <p>国家一级演员 · 1982—Present · From Tongling to the world</p>
-</footer>
-
-<script>
-// NAV
-const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('solid',window.scrollY>80);
-},{passive:true});
-
-// HERO PARALLAX
-const heroImg=document.querySelector('.hero-img');
-window.addEventListener('scroll',()=>{
-  const st=window.scrollY;
-  if(st<window.innerHeight)heroImg.style.transform=`translateY(${st*0.15}px)`;
-},{passive:true});
-
-// INTERSECTION OBSERVER
-const ob=new IntersectionObserver(e=>{
-  e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('vi');ob.unobserve(x.target)}})
-},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv').forEach(x=>ob.observe(x));
-
-// J-STEP ROWS ALSO NEED SEPARATE OBSERVER
-document.querySelectorAll('.j-step').forEach(x=>ob.observe(x));
-</script>
-
-<!-- 站群导航 2026-05-15 -->
-<footer style="margin-top:4rem;padding:2rem;border-top:1px solid var(--border,#ddd);text-align:center;font-size:0.85rem;color:var(--text2,#888)">
-  <p style="margin-bottom:0.5rem">🌐 站群矩阵</p>
-  <nav style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap">
-    <a href="../Gala个人站/index.html" style="color:var(--emerald,#1a6b5a);text-decoration:none">✨ Gala</a>
-    <a href="../小龙虾个人站/index.html" style="color:var(--emerald,#1a6b5a);text-decoration:none">🦞 小龙虾</a>
-    <a href="../小龙虾_内容库/index.html" style="color:var(--emerald,#1a6b5a);text-decoration:none">📚 内容库</a>
-    <a href="../小朴个人站/index.html" style="color:var(--emerald,#1a6b5a);text-decoration:none">🌱 小朴</a>
-    <a href="../小虾米个人站/index.html" style="color:var(--emerald,#1a6b5a);text-decoration:none">🦐 小虾米</a>
-    <a href="../电商官网/index.html" style="color:var(--emerald,#1a6b5a);text-decoration:none">🛒 电商</a>
-    <a href="../室内设计/index.html" style="color:var(--emerald,#1a6b5a);text-decoration:none">🏠 室内</a>
-    <a href="../小石头S版/index.html" style="color:var(--emerald,#1a6b5a);text-decoration:none">🏆 小石头S</a>
-    <a href="../AURA创意项目/index.html" style="color:var(--emerald,#1a6b5a);text-decoration:none">💫 AURA</a>
   </nav>
-  <p style="margin-top:0.5rem;font-size:0.75rem">City_Grande_Gala · 作品集矩阵</p>
-</footer>
+
+  <!-- ================================================================
+       HERO
+       ================================================================ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-label">国家一级演员</p>
+        <h1 class="hero-title">
+          小石头S<br />
+          <span class="accent">以身为笔</span>
+        </h1>
+        <div class="hero-row">
+          <p class="hero-sub">
+            <strong>章功力</strong> — 从安徽铜陵走到巴黎，从孤⼉走到法兰西共和国总统奖。<br />空中每一秒，都是十年功。
+          </p>
+          <div class="hero-meta">
+            <p><span>30+</span> Years of Mastery</p>
+            <p><span>12</span> Countries</p>
+            <p><span>15+</span> Major Awards</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>探索</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       QUOTE
+       ================================================================ -->
+  <section class="section-cream">
+    <div class="container">
+      <div class="quote-section reveal">
+        <p class="quote-text">
+          "他不只是拿了奖杯的人。<br />他是从没有退路的地方，<br />硬生生走出一条路的人。"
+        </p>
+        <p class="quote-attrib">— 小石头S</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       JOURNEY TIMELINE
+       ================================================================ -->
+  <section class="section-white" id="journey">
+    <div class="container">
+      <p class="section-label reveal">The Journey</p>
+      <h2 class="section-title reveal">逆风之路</h2>
+      <div class="timeline">
+        <div class="timeline-item reveal reveal-d1">
+          <div class="year">1982</div>
+          <div class="tl-content">
+            <h3>安徽铜陵 · 逆风开局</h3>
+            <p>母亲在他出生时离世，父亲早年也走了。爷爷把他拉扯大。4岁送去练体操——不是因为他有天赋，是因为没有退路。</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal reveal-d2">
+          <div class="year">1989</div>
+          <div class="tl-content">
+            <h3>安徽黄梅戏艺术职业学院</h3>
+            <p>7岁考入，8年专业杂技训练。爷爷每月20元伙食费送他入行。这8年把他从一个普通孩子锻造成了一个杂技人。</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal reveal-d3">
+          <div class="year">1997</div>
+          <div class="tl-content">
+            <h3>沈阳杂技团</h3>
+            <p>毕业后与同学姚登波一同加入。老师周其品收他为义子，亲手打磨《高椅》。没有周老师，就没有后来的小石头S。</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal reveal-d4">
+          <div class="year">2001</div>
+          <div class="tl-content">
+            <h3>法兰西共和国总统奖</h3>
+            <p>法国第二十二届"明日"世界马戏节。《高椅》震惊全场——唯一金奖 + 法兰西共和国总统奖。同年金菊奖、最佳节目奖、最佳演员奖全部收入。<br />10月雅典卫城演出，9米无保险，一位外国老太太当场吓晕。那时他一场演出挣37美元。</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal reveal-d1">
+          <div class="year">2002</div>
+          <div class="tl-content">
+            <h3>央视春晚 · 一等奖</h3>
+            <p>与姚登波的《力量》在央视春节联欢晚会演出，获观众最喜爱节目一等奖。全国瞩目的几分钟，浓缩了十几年的汗水。</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal reveal-d2">
+          <div class="year">2006</div>
+          <div class="tl-content">
+            <h3>太阳马戏团 · 蒙特利尔</h3>
+            <p>加入世界顶级马戏团，主演剧目《盒子》。从沈阳到蒙特利尔，从中国杂技台到全球巡演——这是他走了近20年的路。</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal reveal-d3">
+          <div class="year">2019</div>
+          <div class="tl-content">
+            <h3>审判员 · 明日马戏节</h3>
+            <p>受法国邀请，回到18年前夺冠的舞台——这一次，坐在了裁判席。同年返校任教，把路传给来者。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       WORKS
+       ================================================================ -->
+  <section class="section-dark" id="works">
+    <div class="container">
+      <p class="section-label reveal">Signature Works</p>
+      <h2 class="section-title reveal">代表作品</h2>
+      <div class="works-grid">
+        <div class="work-card reveal reveal-d1" data-tilt>
+          <p class="w-num">01</p>
+          <h3>单人高椅</h3>
+          <p>层层叠椅，9米无保险。雅典卫城惊晕老太太的传奇。</p>
+        </div>
+        <div class="work-card reveal reveal-d2" data-tilt>
+          <p class="w-num">02</p>
+          <h3>力量</h3>
+          <p>与姚登波合作。人体极限雕塑。2002年春晚一等奖作品。</p>
+        </div>
+        <div class="work-card reveal reveal-d3" data-tilt>
+          <p class="w-num">03</p>
+          <h3>盒子 · 太阳马戏团</h3>
+          <p>蒙特利尔驻场。世界巡演。从中国少年到国际大将。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       HONORS
+       ================================================================ -->
+  <section class="section-white" id="honors">
+    <div class="container">
+      <p class="section-label reveal">Honors Catalog</p>
+      <h2 class="section-title reveal">荣誉墙</h2>
+      <div class="honors-grid">
+        <div class="honor-card reveal reveal-d1">
+          <p class="h-year">—</p>
+          <h4>国家一级演员</h4>
+          <p>中国杂技界最高职称</p>
+          <span class="h-tag">National</span>
+        </div>
+        <div class="honor-card reveal reveal-d2">
+          <p class="h-year">2001</p>
+          <h4>法兰西共和国总统奖</h4>
+          <p>明日世界马戏节 · 唯一金奖</p>
+          <span class="h-tag">International</span>
+        </div>
+        <div class="honor-card reveal reveal-d3">
+          <p class="h-year">2001</p>
+          <h4>金菊奖 · 最佳演员奖</h4>
+          <p>第一届中国杂技比赛</p>
+          <span class="h-tag">National</span>
+        </div>
+        <div class="honor-card reveal reveal-d4">
+          <p class="h-year">2002</p>
+          <h4>央视春晚 · 一等奖</h4>
+          <p>《力量》观众最喜爱作品</p>
+          <span class="h-tag">National</span>
+        </div>
+        <div class="honor-card reveal reveal-d1">
+          <p class="h-year">—</p>
+          <h4>全国五一劳动奖章</h4>
+          <p>国家劳动荣誉</p>
+          <span class="h-tag">National</span>
+        </div>
+        <div class="honor-card reveal reveal-d2">
+          <p class="h-year">2019</p>
+          <h4>明日马戏节 · 审判员</h4>
+          <p>从选手到评审的身份蜕变</p>
+          <span class="h-tag">International</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       ABOUT / NOW
+       ================================================================ -->
+  <section class="section-cream" id="about">
+    <div class="container">
+      <div class="reveal" style="max-width: 600px; margin: 0 auto; text-align: center;">
+        <p class="section-label" style="justify-content:center;">Now</p>
+        <h2 class="section-title" style="margin-bottom:1.5rem;">故事没有结束</h2>
+        <p style="color:var(--warm-gray); font-size:0.95rem; line-height:1.9; max-width:50ch; margin:0 auto;">
+          2012年成立演艺公司。2015年俄罗斯世锦赛优秀奖。2019年返校任教，把路传给下一代。<br /><br />
+          从铜陵走到巴黎，从孤儿走到国家一级演员——这条路，还在继续。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       FOOTER
+       ================================================================ -->
+  <footer>
+    <div class="container">
+      <p>&copy; MMXXVI 小石头S · 以身为笔</p>
+    </div>
+  </footer>
+
+  <!-- ================================================================
+       SCRIPTS
+       ================================================================ -->
+  <script>
+    (function() {
+      'use strict';
+
+      /* NAV */
+      const nav = document.getElementById('navbar');
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 80);
+      }, { passive: true });
+
+      /* IntersectionObserver */
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    })();
+  </script>
 </body>
 </html>
